@@ -26,6 +26,25 @@ class Model:
         :return: lista di tuple --> (nome dell'impianto, media), es. (Impianto A, 123)
         """
         # TODO
+        lista_risultati = []
+
+        for impianto in self._impianti:
+            consumi_impianto = impianto.get_consumi()
+            totale_kwh_mese = 0
+            giorni_count = 0
+
+            for consumo in consumi_impianto:
+
+                if consumo.data.month == mese:
+                    totale_kwh_mese += consumo.kwh
+                    giorni_count += 1
+
+            if giorni_count > 0:
+                media = totale_kwh_mese/giorni_count
+                lista_risultati.append((impianto.nome, media))
+
+        return lista_risultati
+
 
     def get_sequenza_ottima(self, mese:int):
         """
@@ -48,10 +67,27 @@ class Model:
         """ Implementa la ricorsione """
         # TODO
 
+
     def __get_consumi_prima_settimana_mese(self, mese: int):
         """
         Restituisce i consumi dei primi 7 giorni del mese selezionato per ciascun impianto.
         :return: un dizionario: {id_impianto: [kwh_giorno1, ..., kwh_giorno7]}
         """
         # TODO
+
+        for impianto in self._impianti:
+            consumi_impianto = impianto.get_consumi()
+            kwh_7gg = []
+            giorni_count = 0
+            for consumo in consumi_impianto:
+                while giorni_count < 7:
+                    if consumo.data.month == mese:
+                        kwh_7gg.append(consumo.kwh)
+                        giorni_count += 1
+            dizionario = {impianto.id_impianto : [kwh_7gg[0], kwh_7gg[1], kwh_7gg[2], kwh_7gg[3],
+                                                  kwh_7gg[4], kwh_7gg[5], kwh_7gg[6]]}
+        return dizionario
+
+
+
 
