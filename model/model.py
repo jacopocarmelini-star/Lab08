@@ -74,19 +74,16 @@ class Model:
         :return: un dizionario: {id_impianto: [kwh_giorno1, ..., kwh_giorno7]}
         """
         # TODO
-
+        consumi_prima_settimana = {}
         for impianto in self._impianti:
             consumi_impianto = impianto.get_consumi()
             kwh_7gg = []
-            giorni_count = 0
             for consumo in consumi_impianto:
-                while giorni_count < 7:
-                    if consumo.data.month == mese:
-                        kwh_7gg.append(consumo.kwh)
-                        giorni_count += 1
-            dizionario = {impianto.id_impianto : [kwh_7gg[0], kwh_7gg[1], kwh_7gg[2], kwh_7gg[3],
-                                                  kwh_7gg[4], kwh_7gg[5], kwh_7gg[6]]}
-        return dizionario
+                if consumo.data.month == mese and len(kwh_7gg) < 7:
+                    kwh_7gg.append(consumo.kwh)
+            consumi_prima_settimana[impianto.id] = kwh_7gg
+
+        return consumi_prima_settimana
 
 
 
